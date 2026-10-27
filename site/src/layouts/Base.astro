@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE } from '../config';
 import logoBrut from '../../public/logo.svg?raw';
+import { ClientRouter } from 'astro:transitions';
 
 // Le logo est intégré une seule fois à la page (<symbol>) puis réutilisé : il s'affiche
 // donc immédiatement à chaque page, sans téléchargement ni clignotement, et ses lettres
@@ -33,6 +34,7 @@ const canonique = new URL(Astro.url.pathname, Astro.site);
         if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
       } catch (e) {}
     </script>
+    <ClientRouter />
     <link rel="canonical" href={canonique} />
     <link rel="icon" href="/logo.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
@@ -47,10 +49,18 @@ const canonique = new URL(Astro.url.pathname, Astro.site);
       <symbol id="logo" viewBox="240 205 600 665" set:html={logoContenu} />
     </svg>
     <Header />
-    <main id="contenu"><slot /></main>
+    <main id="contenu" transition:name="contenu" transition:animate="none"><slot /></main>
     <Footer />
   </body>
 </html>
+
+<script>
+  // Le thème choisi (attribut sur <html>) doit survivre aux changements de page.
+  document.addEventListener('astro:before-swap', (e) => {
+    const theme = document.documentElement.dataset.theme;
+    if (theme) e.newDocument.documentElement.dataset.theme = theme;
+  });
+</script>
 
 <style is:global>
   .evitement { position: absolute; left: -999px; }

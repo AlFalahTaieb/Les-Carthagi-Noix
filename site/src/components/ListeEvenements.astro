@@ -17,11 +17,14 @@ const rendus = await Promise.all(evts.map(async (e) => (await render(e)).Content
 
 <script>
   // Masque les événements passés si la page n'a pas été reconstruite depuis.
-  const maintenant = Date.now();
-  let restants = 0;
-  document.querySelectorAll<HTMLElement>('.evt').forEach((el) => {
-    if (Number(el.dataset.fin) < maintenant) el.hidden = true;
-    else restants++;
+  document.addEventListener('astro:page-load', () => {
+    const maintenant = Date.now();
+    let restants = 0;
+    document.querySelectorAll<HTMLElement>('.evt').forEach((el) => {
+      if (Number(el.dataset.fin) < maintenant) el.hidden = true;
+      else restants++;
+    });
+    const vide = document.querySelector<HTMLElement>('.vide');
+    if (vide && restants === 0) vide.hidden = false;
   });
-  if (restants === 0) document.querySelector<HTMLElement>('.vide')!.hidden = false;
 </script>

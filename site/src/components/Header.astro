@@ -3,7 +3,7 @@ import { NAV, SITE } from '../config';
 import Logo from './Logo.astro';
 const actuel = Astro.url.pathname;
 ---
-<header class="entete">
+<header class="entete" transition:persist transition:name="entete">
   <div class="conteneur barre">
     <a class="marque" href="/" aria-label={`${SITE.nom}, accueil`}>
       <Logo width="46" height="51" />
@@ -83,5 +83,16 @@ const actuel = Astro.url.pathname;
   bouton?.addEventListener('click', () => {
     const ouvert = menu?.classList.toggle('ouvert');
     bouton.setAttribute('aria-expanded', String(!!ouvert));
+  });
+
+  // L'en-tête est conservé d'une page à l'autre : on met à jour la page active et on referme le menu.
+  document.addEventListener('astro:page-load', () => {
+    const chemin = location.pathname;
+    document.querySelectorAll<HTMLAnchorElement>('.menu a:not(.bouton)').forEach((a) => {
+      if (chemin.startsWith(a.getAttribute('href') ?? '/\0')) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+    menu?.classList.remove('ouvert');
+    bouton?.setAttribute('aria-expanded', 'false');
   });
 </script>
