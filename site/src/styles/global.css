@@ -43,15 +43,6 @@
   }
 }
 
-/* Logo : version à lettres noires en clair, à lettres crème en sombre */
-.logo-sombre { display: none; }
-:root[data-theme='dark'] .logo-clair { display: none; }
-:root[data-theme='dark'] .logo-sombre { display: block; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .logo-clair { display: none; }
-  :root:not([data-theme='light']) .logo-sombre { display: block; }
-}
-
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
@@ -62,7 +53,7 @@ body {
   font: 1.0625rem/1.7 var(--texte);
   text-rendering: optimizeLegibility;
 }
-img { max-width: 100%; height: auto; display: block; }
+img, svg { max-width: 100%; height: auto; display: block; }
 a { color: var(--cuivre-texte); text-underline-offset: 0.2em; }
 a:hover { color: var(--encre); }
 :focus-visible { outline: 2px solid var(--cuivre); outline-offset: 3px; }

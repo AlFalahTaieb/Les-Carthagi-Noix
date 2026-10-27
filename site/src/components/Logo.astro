@@ -1,5 +1,6 @@
 ---
-const { alt = '', width, height, class: classe = '' } = Astro.props;
+const { alt = '', width, height } = Astro.props;
 ---
-<img class={`logo-clair ${classe}`} src="/logo.svg" {alt} {width} {height} />
-<img class={`logo-sombre ${classe}`} src="/logo-sombre.svg" alt="" aria-hidden="true" {width} {height} />
+<svg viewBox="0 0 600 665" {width} {height} role={alt ? 'img' : undefined} aria-label={alt || undefined} aria-hidden={alt ? undefined : 'true'} focusable="false">
+  <use href="#logo" />
+</svg>

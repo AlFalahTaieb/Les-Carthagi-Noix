@@ -88,7 +88,7 @@ const actus = (await actualitesRecentes()).slice(0, 3);
   .heros-grille { display: grid; grid-template-columns: 1.3fr 1fr; gap: 3rem; align-items: center; }
   .chapeau { font-size: 1.2rem; color: var(--encre-douce); max-width: 34rem; }
   .actions { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 2rem; }
-  .heros-logo :global(img) { width: min(100%, 26rem); margin-inline: auto; }
+  .heros-logo :global(svg) { width: min(100%, 26rem); margin-inline: auto; }
   .devise-bande { margin: clamp(2.5rem, 6vw, 4rem) 0 0; padding: 1rem; text-align: center; font-family: var(--titre); letter-spacing: 0.35em; text-transform: uppercase; font-size: 0.9rem; color: var(--creme-fixe); background: var(--bande); }
   .duo { display: grid; grid-template-columns: 1.3fr 1fr; gap: 4rem; align-items: center; }
   .photo { max-width: 20rem; aspect-ratio: 3 / 4; justify-self: center; margin: 0.6rem; }
@@ -102,7 +102,7 @@ const actus = (await actualitesRecentes()).slice(0, 3);
   @media (max-width: 52rem) {
     .heros-grille, .duo { grid-template-columns: 1fr; gap: 2.5rem; }
     .heros-logo { order: -1; }
-    .heros-logo :global(img) { width: 11rem; margin-inline: 0; }
+    .heros-logo :global(svg) { width: 11rem; margin-inline: 0; }
     .cartes { grid-template-columns: 1fr; }
   }
 </style>
