@@ -27,12 +27,26 @@ jobs:
       - run: npm ci
       - run: npm run build
 
+      # lftp gère le FTPS explicite d'o2switch (l'action FTP-Deploy échouait avec ECONNRESET).
+      - name: Installer lftp
+        working-directory: .
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
       - name: Envoi par FTPS
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          local-dir: site/dist/
-          server-dir: ${{ secrets.FTP_DIR }}
+        working-directory: .
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_DIR: ${{ secrets.FTP_DIR }}
+        run: |
+          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "ftp://$FTP_SERVER" <<EOF
+          set ftp:ssl-force true
+          set ftp:ssl-protect-data true
+          set net:max-retries 3
+          set net:timeout 20
+          mirror --reverse --delete --verbose --parallel=2 \
+            --exclude-glob .well-known/ --exclude-glob cgi-bin/ --exclude-glob .ftpquota \
+            site/dist/ "${FTP_DIR:-./}"
+          bye
+          EOF
