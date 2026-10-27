@@ -1,0 +1,42 @@
+---
+import { SITE, NAV } from '../config';
+import Logo from './Logo.astro';
+import Reseaux from './Reseaux.astro';
+---
+<footer class="pied">
+  <div class="conteneur grille">
+    <div>
+      <Logo alt="Logo Les Carthagi’Noix" width="90" height="100" />
+    </div>
+    <div>
+      <p class="devise">{SITE.devise}</p>
+      <p class="petit">Association culturelle grenobloise, fondée le 31 octobre 2025.</p>
+    </div>
+    <nav aria-label="Pied de page">
+      <ul>
+        {NAV.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        <li><a href={SITE.adhesion}>Adhérer</a></li>
+      </ul>
+    </nav>
+    <div>
+      {SITE.email && <p><a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>}
+      <Reseaux taille={22} />
+    </div>
+  </div>
+  <p class="conteneur copy">© {new Date().getFullYear()} Les Carthagi’Noix · Grenoble</p>
+</footer>
+
+<style>
+  .pied { background: var(--creme-fonce); border-top: 1px solid var(--trait); padding-block: 3rem 1.5rem; margin-top: 2rem; }
+  .grille { display: grid; grid-template-columns: auto 1.4fr 1fr 1fr; gap: 2.5rem; align-items: start; }
+  .devise { font-family: var(--titre); font-size: 1.3rem; margin-bottom: 0.4rem; }
+  .petit { color: var(--encre-douce); font-size: 0.95rem; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li, .grille p { margin-bottom: 0.4rem; }
+  .pied a { color: var(--encre); text-decoration: none; }
+  .pied a:hover { text-decoration: underline; }
+  .pied a:hover { color: var(--cuivre-texte); }
+  .copy { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--trait); font-size: 0.85rem; color: var(--encre-douce); }
+  @media (max-width: 52rem) { .grille { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 34rem) { .grille { grid-template-columns: 1fr; } }
+</style>

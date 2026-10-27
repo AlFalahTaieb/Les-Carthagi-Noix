@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config';
+import Reseaux from '../components/Reseaux.astro';
+---
+<Base titre="Contact" description="Contacter l’association Les Carthagi’Noix ou adhérer.">
+  <section class="section">
+    <div class="conteneur lecture">
+      <p class="sur-titre">Contact</p>
+      <h1>Nous rejoindre</h1>
+      <span class="filet"></span>
+      <h2>Adhérer</h2>
+      <p>L’adhésion se fait en ligne, en quelques minutes, via HelloAsso.</p>
+      <p><a class="bouton" href={SITE.adhesion}>Adhérer à l’association</a></p>
+
+      <h2>Nous écrire</h2>
+      {SITE.email
+        ? <p><a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+        : <p>Notre adresse e-mail sera bientôt disponible. En attendant, retrouvez-nous aux événements de l’agenda.</p>}
+
+      <h2>Suivez-nous</h2>
+      <p>Actualités, coulisses et concerts : retrouvez-nous sur les réseaux.</p>
+      <Reseaux libelle />
+    </div>
+  </section>
+</Base>

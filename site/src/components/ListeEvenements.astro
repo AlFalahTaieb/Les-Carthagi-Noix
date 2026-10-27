@@ -1,0 +1,27 @@
+---
+import { render } from 'astro:content';
+import Evenement from './Evenement.astro';
+import { evenementsAVenir } from '../utils';
+const { max } = Astro.props;
+let evts = await evenementsAVenir();
+if (max) evts = evts.slice(0, max);
+const rendus = await Promise.all(evts.map(async (e) => (await render(e)).Content));
+---
+<div class="liste">
+  {evts.map((e, i) => {
+    const Contenu = rendus[i];
+    return <Evenement evenement={e}><Contenu /></Evenement>;
+  })}
+  <p class="vide" hidden={evts.length > 0}>Aucun événement n’est programmé pour le moment. Revenez bientôt !</p>
+</div>
+
+<script>
+  // Masque les événements passés si la page n'a pas été reconstruite depuis.
+  const maintenant = Date.now();
+  let restants = 0;
+  document.querySelectorAll<HTMLElement>('.evt').forEach((el) => {
+    if (Number(el.dataset.fin) < maintenant) el.hidden = true;
+    else restants++;
+  });
+  if (restants === 0) document.querySelector<HTMLElement>('.vide')!.hidden = false;
+</script>

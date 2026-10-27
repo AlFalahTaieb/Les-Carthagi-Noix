@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import ListeEvenements from '../components/ListeEvenements.astro';
+---
+<Base titre="Agenda" description="Les prochains événements des Carthagi’Noix à Grenoble : concerts, rencontres et activités.">
+  <section class="section">
+    <div class="conteneur">
+      <p class="sur-titre">Agenda</p>
+      <h1>Prochains rendez-vous</h1>
+      <span class="filet"></span>
+      <div class="rdv">
+        <p class="sur-titre">Chaque semaine</p>
+        <p><strong>Club de musique orientale</strong>, tous les vendredis de 18h à 20h à Grenoble. Ouvert à tous, débutants comme confirmés.</p>
+      </div>
+      <ListeEvenements />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .rdv { background: var(--creme-fonce); border-left: 3px solid var(--cuivre); padding: 1.25rem 1.5rem 0.4rem; margin-block: 1.5rem 2.5rem; max-width: 44rem; }
+</style>

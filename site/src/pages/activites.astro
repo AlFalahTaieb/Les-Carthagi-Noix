@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config';
+const enCours = [
+  { titre: 'Club de musique orientale', texte: 'Animé par Abdelaziz Dhib, professeur de musique tunisien et président d’honneur de l’association, le club se réunit tous les vendredis de 18h à 20h à Grenoble. Ouvert aux passionnés, débutants comme confirmés, il propose un espace de découverte, d’apprentissage et de pratique collective des musiques du monde arabe.' },
+  { titre: 'Mosaïque, notre groupe', texte: 'Le groupe de musique de l’association fait vivre ce répertoire sur scène et le partage avec le public lors de concerts et d’événements culturels.' },
+];
+const aVenir = [
+  { titre: 'Club de chant', texte: 'Réunir les amateurs de chant autour de répertoires variés.' },
+  { titre: 'Concerts et événements culturels', texte: 'Mettre en valeur les artistes, les musiques et les traditions de différentes cultures.' },
+  { titre: 'Projections de films', texte: 'Des séances pour découvrir d’autres regards.' },
+  { titre: 'Ateliers de danse', texte: 'Découvrir les danses et expressions artistiques du monde.' },
+  { titre: 'Jeux de société', texte: 'Des rencontres conviviales et intergénérationnelles.' },
+  { titre: 'Conférences et rencontres', texte: 'Des échanges autour de thématiques artistiques, historiques et sociétales.' },
+];
+---
+<Base titre="Activités" description="Club de musique orientale, groupe Mosaïque et projets à venir : chant, concerts, cinéma, danse, jeux et conférences.">
+  <section class="section">
+    <div class="conteneur">
+      <p class="sur-titre">Nos activités</p>
+      <h1>La culture se partage</h1>
+      <span class="filet"></span>
+      <p class="lecture chapeau">Nous développons progressivement des activités autour de la musique, de la culture et du partage, avec une programmation diversifiée, ouverte à tous les Grenoblois curieux de nouveaux univers culturels.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="conteneur">
+      <p class="sur-titre">Déjà en place</p>
+      <h2>Au quotidien</h2>
+      <div class="liste">
+        {enCours.map((a) => <article><h3>{a.titre}</h3><p>{a.texte}</p></article>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="conteneur">
+      <p class="sur-titre">En préparation</p>
+      <h2>Ce qui arrive</h2>
+      <ul class="grille">
+        {aVenir.map((a) => <li><h3>{a.titre}</h3><p>{a.texte}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="conteneur">
+      <p class="sur-titre">Sur les réseaux</p>
+      <h2>Une présence culturelle vivante</h2>
+      <div class="lecture">
+        <p>Au-delà de l’annonce de nos événements, nous voulons faire de nos plateformes numériques un espace de découverte, de transmission et de valorisation culturelle : contenus musicaux et artistiques, patrimoine et traditions, portraits d’acteurs grenoblois, découvertes de Grenoble et liens entre Grenoble, la Tunisie, le monde arabe et la Méditerranée.</p>
+        <p><a class="bouton" href={SITE.adhesion}>Adhérer à l’association</a></p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .chapeau { font-size: 1.2rem; color: var(--encre-douce); }
+  .liste { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 2.5rem; margin-top: 2rem; }
+  .liste article { border-left: 2px solid var(--cuivre); padding-left: 1.5rem; }
+  .grille { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 2rem; }
+  .grille li { border-top: 2px solid var(--cuivre); padding-top: 1rem; }
+  .grille p { color: var(--encre-douce); }
+</style>

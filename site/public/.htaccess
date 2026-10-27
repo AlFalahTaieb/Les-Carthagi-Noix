@@ -1,0 +1,22 @@
+# Apache (o2switch)
+RewriteEngine On
+
+# Forcer HTTPS
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://www.lescarthaginoix.com%{REQUEST_URI} [L,R=301]
+
+# Forcer www
+RewriteCond %{HTTP_HOST} ^lescarthaginoix\.com$ [NC]
+RewriteRule ^ https://www.lescarthaginoix.com%{REQUEST_URI} [L,R=301]
+
+ErrorDocument 404 /404.html
+
+# Cache : fichiers versionnés très longtemps, pages à revalider
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js|woff2?)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(html|xml)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+</IfModule>

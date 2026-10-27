@@ -1,0 +1,108 @@
+---
+import Base from '../layouts/Base.astro';
+import ListeEvenements from '../components/ListeEvenements.astro';
+import { actualitesRecentes, dateSimple } from '../utils';
+import { SITE } from '../config';
+import Logo from '../components/Logo.astro';
+const actus = (await actualitesRecentes()).slice(0, 3);
+---
+<Base>
+  <section class="heros">
+    <div class="conteneur heros-grille">
+      <div class="heros-texte">
+        <p class="sur-titre apparait" style="--i:0">Association culturelle · Grenoble</p>
+        <h1 class="apparait" style="--i:1">Des passerelles entre Grenoble et le monde arabe</h1>
+        <span class="filet apparait" style="--i:2"></span>
+        <p class="chapeau apparait" style="--i:2">Musique, arts, rencontres et partage interculturel : nous créons des moments de découverte et de convivialité, accessibles à tou·te·s.</p>
+        <p class="actions apparait" style="--i:3">
+          <a class="bouton" href={SITE.adhesion}>Adhérer à l’association</a>
+          <a class="bouton contour" href="/agenda/">Voir l’agenda</a>
+        </p>
+      </div>
+      <div class="heros-logo apparait" style="--i:2">
+        <Logo alt="Logo Les Carthagi’Noix : une noix ornée du signe de Tanit" width="420" height="466" />
+      </div>
+    </div>
+    <p class="devise-bande">{SITE.devise}</p>
+  </section>
+
+  <section class="section">
+    <div class="conteneur">
+      <p class="sur-titre">Prochainement</p>
+      <h2>À venir</h2>
+      <ListeEvenements max={3} />
+      <p><a href="/agenda/">Tout l’agenda →</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="conteneur duo">
+      <div class="lecture">
+        <p class="sur-titre">Qui sommes-nous</p>
+        <h2>Deux identités, une seule envie</h2>
+        <p>Le nom des Carthagi’Noix est né d’un jeu de mots entre <strong>les Carthaginois</strong>, habitants de l’antique cité de Carthage, et <strong>la noix</strong>, symbole du Dauphiné. Deux racines, tunisienne et grenobloise, qui dialoguent.</p>
+        <p>Fondée le 31 octobre 2025 par quatre passionnés de culture, l’association crée des espaces de rencontre entre personnes de différentes origines et générations, et accueille tout particulièrement les étudiants internationaux.</p>
+        <p><a class="bouton contour" href="/association/">Découvrir l’association</a></p>
+      </div>
+      <div class="cadre-noix photo">
+        <img src="/images/equipe.jpg" alt="Les membres du bureau devant la fontaine des Trois Ordres, à Grenoble" width="458" height="611" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="conteneur">
+      <p class="sur-titre">Nos activités</p>
+      <h2>Faire vivre la culture ensemble</h2>
+      <ul class="cartes">
+        <li><h3>Club de musique orientale</h3><p>Chaque vendredi de 18h à 20h à Grenoble, pour débutants comme confirmés.</p></li>
+        <li><h3>Mosaïque</h3><p>Notre groupe de musique, sur scène lors de concerts et d’événements culturels.</p></li>
+        <li><h3>Bientôt</h3><p>Club de chant, projections, ateliers de danse, jeux de société, conférences.</p></li>
+      </ul>
+      <p><a href="/activites/">Toutes nos activités →</a></p>
+    </div>
+  </section>
+
+  {actus.length > 0 && (
+    <section class="section">
+      <div class="conteneur">
+        <p class="sur-titre">Actualités</p>
+        <h2>Les dernières nouvelles</h2>
+        <ul class="actus">
+          {actus.map((a) => (
+            <li>
+              <time datetime={a.data.date.toISOString()}>{dateSimple(a.data.date)}</time>
+              <h3><a href={`/actualites/${a.id}/`}>{a.data.titre}</a></h3>
+              <p>{a.data.resume}</p>
+            </li>
+          ))}
+        </ul>
+        <p><a href="/actualites/">Toutes les actualités →</a></p>
+      </div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .heros { padding-top: clamp(2.5rem, 7vw, 5.5rem); background: radial-gradient(circle at 80% 30%, var(--creme-fonce), var(--creme) 60%); }
+  .heros-grille { display: grid; grid-template-columns: 1.3fr 1fr; gap: 3rem; align-items: center; }
+  .chapeau { font-size: 1.2rem; color: var(--encre-douce); max-width: 34rem; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 2rem; }
+  .heros-logo :global(img) { width: min(100%, 26rem); margin-inline: auto; }
+  .devise-bande { margin: clamp(2.5rem, 6vw, 4rem) 0 0; padding: 1rem; text-align: center; font-family: var(--titre); letter-spacing: 0.35em; text-transform: uppercase; font-size: 0.9rem; color: var(--creme-fixe); background: var(--bande); }
+  .duo { display: grid; grid-template-columns: 1.3fr 1fr; gap: 4rem; align-items: center; }
+  .photo { max-width: 20rem; aspect-ratio: 3 / 4; justify-self: center; margin: 0.6rem; }
+  .cartes { list-style: none; padding: 0; margin: 2rem 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .cartes li { border-top: 2px solid var(--cuivre); padding-top: 1.1rem; }
+  .cartes p { color: var(--encre-douce); }
+  .actus { list-style: none; padding: 0; margin: 2rem 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 2rem; }
+  .actus time { font-size: 0.85rem; color: var(--cuivre-texte); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .actus h3 a { color: var(--encre); text-decoration: none; }
+  .actus h3 a:hover { color: var(--cuivre-texte); }
+  @media (max-width: 52rem) {
+    .heros-grille, .duo { grid-template-columns: 1fr; gap: 2.5rem; }
+    .heros-logo { order: -1; }
+    .heros-logo :global(img) { width: 11rem; margin-inline: 0; }
+    .cartes { grid-template-columns: 1fr; }
+  }
+</style>

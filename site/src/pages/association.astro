@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import { BUREAU, SITE } from '../config';
+---
+<Base titre="L’association" description="Histoire, valeurs et bureau de l’association culturelle grenobloise Les Carthagi’Noix.">
+  <section class="section">
+    <div class="conteneur">
+      <p class="sur-titre">L’association</p>
+      <h1>Une rencontre entre deux identités</h1>
+      <span class="filet"></span>
+      <div class="lecture prose">
+        <p>Les Carthagi’Noix sont une jeune association culturelle grenobloise, fondée le <strong>31 octobre 2025</strong> par quatre passionnés de culture. Son objectif : favoriser les échanges culturels entre Grenoble et le monde arabe.</p>
+        <p>À travers la musique, les arts, les rencontres et le partage interculturel, nous voulons valoriser la diversité culturelle, encourager le dialogue et créer des moments de découverte et de convivialité accessibles à tou·te·s.</p>
+
+        <h2>L’origine du nom</h2>
+        <p>Le nom est un jeu de mots qui associe deux références :</p>
+        <ul>
+          <li><strong>Les Carthaginois</strong>, habitants de l’antique cité de Carthage, en Tunisie, qui évoquent les racines tunisienne, méditerranéenne et arabe du projet.</li>
+          <li><strong>La noix</strong>, symbole emblématique du Dauphiné, qui représente l’ancrage de l’association à Grenoble et à son territoire.</li>
+        </ul>
+        <p>Cette rencontre illustre notre esprit : créer des passerelles entre les cultures et faire dialoguer les territoires. Notre devise, <em>« {SITE.devise} »</em>, fait référence aux anciens noms des deux villes.</p>
+
+        <h2>Notre logo</h2>
+        <p>Il reflète cette double identité : la forme d’une noix, emblème du Dauphiné, associée au signe de Tanit, déesse et symbole de Carthage.</p>
+
+        <h2>Pourquoi cette association ?</h2>
+        <p>Nous partageons une volonté commune : créer des espaces de rencontre entre des personnes de différentes origines et générations, tout en contribuant au dynamisme culturel grenoblois.</p>
+        <p>Nous souhaitons faire découvrir les cultures tunisienne, arabe et méditerranéenne, mais aussi mettre en valeur la richesse culturelle de Grenoble et de ses habitants. Nous accordons une attention particulière à l’accueil des <strong>étudiants internationaux</strong> : découverte de la ville, rencontres avec les habitants et participation à la vie culturelle et associative locale.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="conteneur bureau">
+      <div class="cadre-noix photo">
+        <img src="/images/equipe.jpg" alt="Les membres du bureau devant la fontaine des Trois Ordres, à Grenoble" width="458" height="611" />
+      </div>
+      <div>
+        <p class="sur-titre">Le bureau</p>
+        <h2>Quatre passionnés</h2>
+        <ul class="membres">
+          {BUREAU.map((m) => <li><strong>{m.nom}</strong><span>{m.role}</span></li>)}
+        </ul>
+        <p class="credit">Photo © Hussein El Cheikh Ali</p>
+        <p><a class="bouton" href={SITE.adhesion}>Rejoindre l’association</a></p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .bureau { display: grid; grid-template-columns: 1fr 1.4fr; gap: 4rem; align-items: center; }
+  .photo { max-width: 19rem; aspect-ratio: 3 / 4; justify-self: center; margin: 0.6rem; }
+  .membres { list-style: none; padding: 0; margin: 1.5rem 0; }
+  .membres li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.8rem 0; border-bottom: 1px solid var(--trait); }
+  .membres span { color: var(--cuivre-texte); }
+  .credit { font-size: 0.85rem; color: var(--encre-douce); }
+  @media (max-width: 52rem) { .bureau { grid-template-columns: 1fr; gap: 2.5rem; } }
+</style>

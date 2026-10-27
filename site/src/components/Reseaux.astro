@@ -1,0 +1,32 @@
+---
+import { SITE } from '../config';
+const { taille = 28, libelle = false } = Astro.props;
+const liens = [
+  { nom: 'Instagram', url: SITE.instagram },
+  { nom: 'Facebook', url: SITE.facebook },
+  { nom: 'YouTube', url: SITE.youtube },
+].filter((l) => l.url);
+---
+{liens.length > 0 && (
+  <ul class="reseaux">
+    {liens.map((l) => (
+      <li>
+        <a href={l.url} target="_blank" rel="noopener noreferrer" aria-label={`${l.nom} (nouvel onglet)`}>
+          <svg viewBox="0 0 24 24" width={taille} height={taille} fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            {l.nom === 'Instagram' && (<><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4.2" /><circle cx="17.3" cy="6.7" r="0.6" fill="currentColor" /></>)}
+            {l.nom === 'Facebook' && (<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />)}
+            {l.nom === 'YouTube' && (<><rect x="2.5" y="5.5" width="19" height="13" rx="4" /><path d="m10 9.5 5 2.5-5 2.5Z" fill="currentColor" /></>)}
+          </svg>
+          {libelle && <span>{l.nom}</span>}
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
+
+<style>
+  .reseaux { list-style: none; display: flex; flex-wrap: wrap; gap: 0.9rem; margin: 0; padding: 0; }
+  a { display: inline-flex; align-items: center; gap: 0.6rem; color: var(--encre); text-decoration: none; padding: 0.7rem; border: 1px solid var(--trait); border-radius: 50%; line-height: 0; transition: color 0.2s, border-color 0.2s, background 0.2s; }
+  a:has(span) { border-radius: 2rem; padding: 0.6rem 1.2rem 0.6rem 0.9rem; line-height: 1.2; font-weight: 600; }
+  a:hover { color: var(--cuivre-texte); border-color: var(--cuivre); }
+</style>

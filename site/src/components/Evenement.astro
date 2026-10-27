@@ -1,0 +1,34 @@
+---
+import { jour, moisCourt, dateLongue, heure } from '../utils';
+const { evenement } = Astro.props;
+const d = evenement.data.date;
+const aHeure = heure(d) !== '00h00';
+---
+<article class="evt" data-fin={d.getTime() + 24 * 3600 * 1000}>
+  <div class="date" aria-hidden="true">
+    <span class="j">{jour(d)}</span>
+    <span class="m">{moisCourt(d)}</span>
+  </div>
+  <div class="corps">
+    <h3>{evenement.data.titre}</h3>
+    <p class="meta">
+      <time datetime={d.toISOString()}>{dateLongue(d)}{aHeure && ` · ${heure(d)}`}</time>
+      {evenement.data.lieu && <span> · {evenement.data.lieu}</span>}
+    </p>
+    <div class="texte"><slot /></div>
+    {evenement.data.lien && <p><a class="bouton contour" href={evenement.data.lien}>{evenement.data.lienTexte ?? 'En savoir plus'}</a></p>}
+  </div>
+</article>
+
+<style>
+  .evt { display: grid; grid-template-columns: 5.5rem 1fr; gap: 1.75rem; padding-block: 2rem; border-top: 1px solid var(--trait); }
+  .evt:first-child { border-top: 0; }
+  .date { border: 1px solid var(--cuivre); text-align: center; padding: 0.7rem 0.3rem; align-self: start; font-family: var(--titre); line-height: 1; }
+  .j { display: block; font-size: 2.2rem; }
+  .m { display: block; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cuivre-texte); margin-top: 0.4rem; }
+  h3 { margin-bottom: 0.3rem; }
+  .meta { color: var(--cuivre-texte); font-weight: 600; font-size: 0.95rem; }
+  .meta time::first-letter { text-transform: uppercase; }
+  .texte :global(p:last-child) { margin-bottom: 0; }
+  @media (max-width: 34rem) { .evt { grid-template-columns: 4rem 1fr; gap: 1rem; } .j { font-size: 1.7rem; } }
+</style>

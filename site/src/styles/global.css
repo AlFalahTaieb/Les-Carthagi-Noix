@@ -1,0 +1,123 @@
+@import '@fontsource/marcellus/400.css';
+@import '@fontsource-variable/hanken-grotesk';
+
+:root {
+  --creme: #f7f2e9;
+  --creme-fonce: #efe6d6;
+  --encre: #1c1a17;
+  --encre-douce: #4a453d;
+  --cuivre: #c28749;
+  --cuivre-texte: #94601f; /* cuivre assombri, lisible sur crème */
+  --trait: #dccdb4;
+  --creme-fixe: #f7f2e9;
+  --bande: #1c1a17;
+  color-scheme: light;
+  --titre: 'Marcellus', 'Times New Roman', serif;
+  --texte: 'Hanken Grotesk Variable', system-ui, sans-serif;
+  --largeur: 68rem;
+  --lecture: 40rem;
+}
+
+:root[data-theme='dark'] {
+  --creme: #17140f;
+  --creme-fonce: #211c15;
+  --encre: #f1e9da;
+  --encre-douce: #c3b8a4;
+  --cuivre: #c98f50;
+  --cuivre-texte: #dba66b;
+  --trait: #3a3226;
+  --bande: #0f0d0a;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --creme: #17140f;
+    --creme-fonce: #211c15;
+    --encre: #f1e9da;
+    --encre-douce: #c3b8a4;
+    --cuivre: #c98f50;
+    --cuivre-texte: #dba66b;
+    --trait: #3a3226;
+    --bande: #0f0d0a;
+    color-scheme: dark;
+  }
+}
+
+/* Logo : version à lettres noires en clair, à lettres crème en sombre */
+.logo-sombre { display: none; }
+:root[data-theme='dark'] .logo-clair { display: none; }
+:root[data-theme='dark'] .logo-sombre { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .logo-clair { display: none; }
+  :root:not([data-theme='light']) .logo-sombre { display: block; }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  transition: background 0.3s, color 0.3s;
+  background: var(--creme);
+  color: var(--encre);
+  font: 1.0625rem/1.7 var(--texte);
+  text-rendering: optimizeLegibility;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--cuivre-texte); text-underline-offset: 0.2em; }
+a:hover { color: var(--encre); }
+:focus-visible { outline: 2px solid var(--cuivre); outline-offset: 3px; }
+
+h1, h2, h3 { font-family: var(--titre); font-weight: 400; line-height: 1.2; letter-spacing: 0.01em; margin: 0 0 0.6em; }
+h1 { font-size: clamp(2rem, 5vw, 3.2rem); }
+h2 { font-size: clamp(1.5rem, 3.2vw, 2.1rem); }
+h3 { font-size: 1.25rem; }
+p { margin: 0 0 1.1em; }
+
+.conteneur { width: min(100% - 2.5rem, var(--largeur)); margin-inline: auto; }
+.lecture { max-width: var(--lecture); }
+.section { padding-block: clamp(3rem, 8vw, 6rem); }
+.section + .section { border-top: 1px solid var(--trait); }
+
+.sur-titre {
+  font: 600 0.78rem/1 var(--texte);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cuivre-texte);
+  margin-bottom: 1rem;
+}
+.filet { display: block; width: 3.5rem; height: 2px; background: var(--cuivre); margin: 0 0 1.5rem; border: 0; }
+
+.bouton {
+  display: inline-block;
+  padding: 0.85em 1.7em;
+  background: var(--encre);
+  color: var(--creme);
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--encre);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.bouton:hover { background: var(--cuivre-texte); border-color: var(--cuivre-texte); color: var(--creme); }
+.bouton.contour { background: transparent; color: var(--encre); }
+.bouton.contour:hover { background: var(--encre); color: var(--creme); border-color: var(--encre); }
+
+/* Cadre en forme de noix / ogive pour les photos */
+.cadre-noix {
+  border-radius: 50% 50% 0.5rem 0.5rem / 38% 38% 0.5rem 0.5rem;
+  overflow: hidden;
+  outline: 2px solid var(--cuivre);
+  outline-offset: 0.6rem;
+  background: var(--creme-fonce);
+}
+.cadre-noix img { width: 100%; height: 100%; object-fit: cover; }
+
+.prose h2 { margin-top: 2em; }
+.prose ul { padding-left: 1.2em; }
+.prose li { margin-bottom: 0.4em; }
+
+/* Apparition douce au chargement */
+@media (prefers-reduced-motion: no-preference) {
+  .apparait { animation: monte 0.9s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--i, 0) * 120ms); }
+  @keyframes monte { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+}

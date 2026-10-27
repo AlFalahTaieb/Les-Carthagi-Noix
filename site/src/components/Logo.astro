@@ -1,0 +1,5 @@
+---
+const { alt = '', width, height, class: classe = '' } = Astro.props;
+---
+<img class={`logo-clair ${classe}`} src="/logo.svg" {alt} {width} {height} />
+<img class={`logo-sombre ${classe}`} src="/logo-sombre.svg" alt="" aria-hidden="true" {width} {height} />
