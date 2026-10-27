@@ -45,6 +45,8 @@ jobs:
           echo | openssl s_client -starttls ftp -connect "$FTP_SERVER:21" 2>/dev/null \
             | openssl x509 > "$RUNNER_TEMP/ftp-cert.pem"
           ACTUELLE=$(openssl x509 -in "$RUNNER_TEMP/ftp-cert.pem" -noout -fingerprint -sha1 | cut -d= -f2)
+          echo "Certificat du serveur FTP, noms valides :"
+          openssl x509 -in "$RUNNER_TEMP/ftp-cert.pem" -noout -subject -ext subjectAltName | sed 's/^/  /'
           if [ "$ACTUELLE" != "$EMPREINTE_ATTENDUE" ]; then
             echo "::error::Le certificat du serveur FTP a changé (empreinte reçue : ${ACTUELLE:-aucune}). Vérifier avant de mettre à jour EMPREINTE_ATTENDUE."
             exit 1
