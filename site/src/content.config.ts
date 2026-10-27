@@ -18,6 +18,8 @@ const evenements = defineCollection({
     // Format : 2026-11-13T19:00:00+01:00 (heure de Grenoble)
     date: z.coerce.date(),
     lieu: z.string().optional(),
+    resume: z.string().optional(), // une phrase pour Google et les IA
+
     lien: z.string().optional(),
     lienTexte: z.string().optional(),
   }),

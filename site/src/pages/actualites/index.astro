@@ -1,9 +1,11 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { actualitesRecentes, dateSimple } from '../../utils';
+import { filAriane } from '../../seo';
+const donnees = [filAriane([{ nom: 'Actualités', chemin: '/actualites/' }])];
 const actus = await actualitesRecentes();
 ---
-<Base titre="Actualités" description="Les nouvelles de l’association Les Carthagi’Noix.">
+<Base titre="Actualités culturelles à Grenoble" description="Les nouvelles des Carthagi’Noix, association culturelle grenobloise : concerts, événements, rencontres et vie de l’association." donnees={donnees}>
   <section class="section">
     <div class="conteneur">
       <p class="sur-titre">Actualités</p>

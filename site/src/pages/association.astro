@@ -1,8 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
 import { BUREAU, SITE } from '../config';
+import { faq, filAriane } from '../seo';
+
+const questions = [
+  { q: 'Qu’est-ce que Les Carthagi’Noix ?', r: 'Les Carthagi’Noix est une association culturelle grenobloise, fondée le 31 octobre 2025 par quatre passionnés de culture. Son objectif est de favoriser les échanges culturels entre Grenoble et le monde arabe, à travers la musique, les arts, les rencontres et le partage interculturel.' },
+  { q: 'Que signifie le nom « Les Carthagi’Noix » ?', r: 'C’est un jeu de mots entre « les Carthaginois », habitants de l’antique cité de Carthage en Tunisie, et « la noix », symbole emblématique du Dauphiné. Le nom associe les racines tunisiennes, méditerranéennes et arabes du projet à l’ancrage de l’association à Grenoble.' },
+  { q: 'Que veut dire la devise « ' + SITE.devise + ' » ?', r: 'La devise fait référence aux anciens noms de Carthage et de Grenoble (Cularo) : elle résume l’idée de créer des passerelles entre les deux villes et leurs cultures.' },
+  { q: 'Quelles activités l’association propose-t-elle à Grenoble ?', r: 'Un club de musique orientale se réunit tous les vendredis de 18h à 20h à Grenoble, ouvert aux débutants comme aux confirmés. L’association a aussi son propre groupe de musique, Mosaïque, et prépare un club de chant, des concerts, des projections de films, des ateliers de danse, des rencontres autour des jeux de société et des conférences.' },
+  { q: 'L’association accueille-t-elle les étudiants internationaux ?', r: 'Oui, c’est une attention particulière de l’association : favoriser la découverte de Grenoble, les rencontres avec les habitants et la participation des étudiants internationaux à la vie culturelle et associative locale.' },
+  { q: 'Comment adhérer aux Carthagi’Noix ?', r: 'L’adhésion se fait en ligne via HelloAsso, à l’adresse ' + SITE.adhesion },
+];
+const donnees = [faq(questions), filAriane([{ nom: 'L’association', chemin: '/association/' }])];
 ---
-<Base titre="L’association" description="Histoire, valeurs et bureau de l’association culturelle grenobloise Les Carthagi’Noix.">
+<Base titre="Qui sommes-nous ? Culture arabe à Grenoble" description="Histoire, valeurs et bureau des Carthagi’Noix, association culturelle née à Grenoble en 2025 pour relier Grenoble, Carthage et le monde arabe." donnees={donnees}>
   <section class="section">
     <div class="conteneur">
       <p class="sur-titre">L’association</p>
@@ -46,9 +57,31 @@ import { BUREAU, SITE } from '../config';
       </div>
     </div>
   </section>
+
+  <section class="section">
+    <div class="conteneur lecture">
+      <p class="sur-titre">Questions fréquentes</p>
+      <h2>Tout savoir sur les Carthagi’Noix</h2>
+      <div class="faq">
+        {questions.map((x) => (
+          <details>
+            <summary>{x.q}</summary>
+            <p>{x.r.startsWith('L’adhésion') ? <>L’adhésion se fait en ligne via HelloAsso : <a href={SITE.adhesion}>adhérer à l’association</a>.</> : x.r}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
 </Base>
 
 <style>
+  .faq details { border-top: 1px solid var(--trait); padding-block: 1rem; }
+  .faq details:last-child { border-bottom: 1px solid var(--trait); }
+  .faq summary { cursor: pointer; font-family: var(--titre); font-size: 1.15rem; list-style: none; display: flex; justify-content: space-between; gap: 1rem; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; color: var(--cuivre-texte); font-family: var(--texte); }
+  .faq details[open] summary::after { content: '–'; }
+  .faq details p { margin: 0.8rem 0 0; color: var(--encre-douce); }
   .bureau { display: grid; grid-template-columns: 1fr 1.4fr; gap: 4rem; align-items: center; }
   .photo { max-width: 19rem; aspect-ratio: 3 / 4; justify-self: center; margin: 0.6rem; }
   .membres { list-style: none; padding: 0; margin: 1.5rem 0; }

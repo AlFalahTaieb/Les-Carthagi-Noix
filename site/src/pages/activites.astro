@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import { SITE } from '../config';
+import { filAriane } from '../seo';
+const donnees = [filAriane([{ nom: 'Activités', chemin: '/activites/' }])];
 const enCours = [
   { titre: 'Club de musique orientale', texte: 'Animé par Abdelaziz Dhib, professeur de musique tunisien et président d’honneur de l’association, le club se réunit tous les vendredis de 18h à 20h à Grenoble. Ouvert aux passionnés, débutants comme confirmés, il propose un espace de découverte, d’apprentissage et de pratique collective des musiques du monde arabe.' },
   { titre: 'Mosaïque, notre groupe', texte: 'Le groupe de musique de l’association fait vivre ce répertoire sur scène et le partage avec le public lors de concerts et d’événements culturels.' },
@@ -14,7 +16,7 @@ const aVenir = [
   { titre: 'Conférences et rencontres', texte: 'Des échanges autour de thématiques artistiques, historiques et sociétales.' },
 ];
 ---
-<Base titre="Activités" description="Club de musique orientale, groupe Mosaïque et projets à venir : chant, concerts, cinéma, danse, jeux et conférences.">
+<Base titre="Musique orientale et activités à Grenoble" description="Club de musique orientale à Grenoble chaque vendredi de 18h à 20h, groupe Mosaïque, et projets : chant, concerts, cinéma, danse, jeux, conférences." donnees={donnees}>
   <section class="section">
     <div class="conteneur">
       <p class="sur-titre">Nos activités</p>

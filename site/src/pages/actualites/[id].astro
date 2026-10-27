@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { dateSimple } from '../../utils';
+import { article, filAriane } from '../../seo';
 
 export async function getStaticPaths() {
   const actus = await getCollection('actualites');
@@ -9,8 +10,9 @@ export async function getStaticPaths() {
 }
 const { a } = Astro.props;
 const { Content } = await render(a);
+const donnees = [article(a), filAriane([{ nom: 'Actualités', chemin: '/actualites/' }, { nom: a.data.titre, chemin: `/actualites/${a.id}/` }])];
 ---
-<Base titre={a.data.titre} description={a.data.resume}>
+<Base titre={a.data.titre} description={a.data.resume} type="article" image={a.data.image} donnees={donnees}>
   <article class="section">
     <div class="conteneur lecture">
       <p class="sur-titre"><a href="/actualites/">← Actualités</a></p>

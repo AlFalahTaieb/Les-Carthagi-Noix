@@ -1,8 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import ListeEvenements from '../components/ListeEvenements.astro';
+import { evenementsAVenir } from '../utils';
+import { evenement, filAriane } from '../seo';
+const donnees = [...(await evenementsAVenir()).map(evenement), filAriane([{ nom: 'Agenda', chemin: '/agenda/' }])];
 ---
-<Base titre="Agenda" description="Les prochains événements des Carthagi’Noix à Grenoble : concerts, rencontres et activités.">
+<Base titre="Agenda culturel à Grenoble" description="Prochains événements de l’association culturelle Les Carthagi’Noix à Grenoble : inauguration, concerts, rencontres et club de musique orientale chaque vendredi." donnees={donnees}>
   <section class="section">
     <div class="conteneur">
       <p class="sur-titre">Agenda</p>

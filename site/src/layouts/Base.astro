@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import { SITE } from '../config';
 import logoBrut from '../../public/logo.svg?raw';
 import { ClientRouter } from 'astro:transitions';
+import { organisation, siteWeb } from '../seo';
 
 // Le logo est intégré une seule fois à la page (<symbol>) puis réutilisé : il s'affiche
 // donc immédiatement à chaque page, sans téléchargement ni clignotement, et ses lettres
@@ -14,10 +15,21 @@ const logoContenu = logoBrut
   .replace(/<\/g>\s*<\/svg>\s*$/, '')
   .replaceAll('fill:rgb(11.372375%,11.372375%,10.588074%)', 'fill:var(--encre)');
 
-interface Props { titre?: string; description?: string; }
-const { titre, description = SITE.description } = Astro.props;
-const titreComplet = titre ? `${titre} · ${SITE.nom}` : `${SITE.nom} · ${SITE.devise}`;
-const canonique = new URL(Astro.url.pathname, Astro.site);
+interface Props {
+  titre?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  donnees?: object[]; // données structurées (JSON-LD) propres à la page
+  noindex?: boolean;
+}
+const { titre, description = SITE.description, image = '/images/og-image.jpg', type = 'website', donnees = [], noindex = false } = Astro.props;
+const titreComplet = !titre ? SITE.titreAccueil : titre.includes('Carthagi’Noix') ? titre : `${titre} · ${SITE.nom}`;
+const canonique = new URL(Astro.url.pathname, SITE.url);
+const imageUrl = new URL(image, SITE.url).href;
+const jsonLd = [organisation(), siteWeb(), ...donnees];
+// Les chevrons sont échappés pour qu'aucun texte ne puisse refermer la balise <script>.
+const serialiser = (o: object) => JSON.stringify(o).replace(/</g, '\\u003c');
 ---
 <!doctype html>
 <html lang="fr">
@@ -26,6 +38,10 @@ const canonique = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{titreComplet}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+    <meta name="geo.region" content="FR-38" />
+    <meta name="geo.placename" content="Grenoble" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="theme-color" content="#f7f2e9" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#17140f" media="(prefers-color-scheme: dark)" />
     <script is:inline>
@@ -37,11 +53,20 @@ const canonique = new URL(Astro.url.pathname, Astro.site);
     <ClientRouter />
     <link rel="canonical" href={canonique} />
     <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={SITE.nom} />
+    <meta property="og:url" content={canonique} />
     <meta property="og:title" content={titreComplet} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL('/images/equipe.jpg', Astro.site)} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="fr_FR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={titreComplet} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    {jsonLd.map((o) => <script type="application/ld+json" set:html={serialiser(o)} />)}
   </head>
   <body>
     <a class="evitement" href="#contenu">Aller au contenu</a>
