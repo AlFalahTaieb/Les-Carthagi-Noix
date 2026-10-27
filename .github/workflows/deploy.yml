@@ -32,6 +32,24 @@ jobs:
         working-directory: .
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
 
+      # Le serveur FTP d'o2switch présente un certificat qu'aucune autorité connue ne signe.
+      # On récupère ce certificat, on vérifie que son empreinte SHA-1 est bien celle attendue,
+      # puis lftp le reçoit comme seule autorité de confiance : la vérification TLS reste active
+      # et tout autre certificat fait échouer le déploiement.
+      - name: Épingler le certificat du serveur FTP
+        working-directory: .
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          EMPREINTE_ATTENDUE: "F4:81:11:0A:37:DF:EB:19:75:6C:8D:29:99:8B:1F:DF:1B:F4:4C:C6"
+        run: |
+          echo | openssl s_client -starttls ftp -connect "$FTP_SERVER:21" 2>/dev/null \
+            | openssl x509 > "$RUNNER_TEMP/ftp-cert.pem"
+          ACTUELLE=$(openssl x509 -in "$RUNNER_TEMP/ftp-cert.pem" -noout -fingerprint -sha1 | cut -d= -f2)
+          if [ "$ACTUELLE" != "$EMPREINTE_ATTENDUE" ]; then
+            echo "::error::Le certificat du serveur FTP a changé (empreinte reçue : ${ACTUELLE:-aucune}). Vérifier avant de mettre à jour EMPREINTE_ATTENDUE."
+            exit 1
+          fi
+
       - name: Envoi par FTPS
         working-directory: .
         env:
@@ -43,6 +61,7 @@ jobs:
           lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "ftp://$FTP_SERVER" <<EOF
           set ftp:ssl-force true
           set ftp:ssl-protect-data true
+          set ssl:ca-file "$RUNNER_TEMP/ftp-cert.pem"
           set net:max-retries 3
           set net:timeout 20
           mirror --reverse --delete --verbose --parallel=2 \
