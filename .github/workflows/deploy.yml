@@ -26,6 +26,8 @@ jobs:
 
       - run: npm ci
       - run: npm run build
+        env:
+          PUBLIC_WEB3FORMS_KEY: ${{ secrets.WEB3FORMS_KEY }}
 
       # lftp gère le FTPS explicite d'o2switch (l'action FTP-Deploy échouait avec ECONNRESET).
       - name: Installer lftp

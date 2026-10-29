@@ -8,10 +8,10 @@ export const SITE = {
   titreAccueil: "Les Carthagi’Noix · Association culturelle à Grenoble",
   fondation: "2025-10-31",
   adhesion: "https://adhesion.lescarthaginoix.com/",
-  // Clé d'accès Web3Forms du formulaire de contact (publique par conception : elle peut être dans le code).
-  // Elle s'obtient sur https://web3forms.com avec l'adresse qui doit recevoir les messages.
+  // Clé d'accès Web3Forms du formulaire de contact. Elle n'est pas dans le dépôt : elle vient de la
+  // variable PUBLIC_WEB3FORMS_KEY (secret GitHub WEB3FORMS_KEY en production, fichier .env en local).
   // Tant qu'elle est vide, le formulaire affiche « bientôt disponible ».
-  web3formsKey: "",
+  web3formsKey: (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | undefined) ?? "",
   // Laisser vide ("") pour masquer un lien.
   email: "",
   instagram: "https://www.instagram.com/lescarthaginoix/",

@@ -47,6 +47,13 @@ Texte de l’article en Markdown.
 `src/config.ts` : e-mail, réseaux sociaux (laisser vide pour masquer), menu, bureau, lien d'adhésion.
 Les couleurs et polices sont dans `src/styles/global.css`.
 
+## Formulaire de contact (Web3Forms)
+
+La clé Web3Forms n'est pas dans le dépôt. En production, elle vient du secret GitHub `WEB3FORMS_KEY`
+(Settings, Secrets and variables, Actions). Pour tester en local, copier `.env.example` en `.env` et
+renseigner `PUBLIC_WEB3FORMS_KEY`. La clé reste visible dans le code HTML de la page publiée, ce qui est
+inévitable pour tout formulaire envoyé depuis le navigateur.
+
 ## Mise en ligne
 
 Après `npm run build`, envoyer le contenu du dossier `dist/` à la racine de l'hébergement du domaine.
