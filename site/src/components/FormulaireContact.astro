@@ -1,0 +1,111 @@
+---
+import { SITE } from '../config';
+const cle = SITE.web3formsKey;
+---
+{cle ? (
+  <form class="formulaire" action="https://api.web3forms.com/submit" method="POST" novalidate>
+    <input type="hidden" name="access_key" value={cle} />
+    <input type="hidden" name="from_name" value={`Site ${SITE.nom}`} />
+    <input type="hidden" name="subject" value={`Nouveau message depuis le site ${SITE.nom}`} />
+    <!-- Piège à robots : invisible pour les humains, rempli par les robots. -->
+    <input type="checkbox" name="botcheck" class="piege" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+    <div class="champ">
+      <label for="nom">Votre nom</label>
+      <input id="nom" name="name" type="text" autocomplete="name" required maxlength="100" />
+    </div>
+    <div class="champ">
+      <label for="courriel">Votre adresse e-mail</label>
+      <input id="courriel" name="email" type="email" autocomplete="email" required maxlength="200" />
+    </div>
+    <div class="champ">
+      <label for="message">Votre message</label>
+      <textarea id="message" name="message" rows="6" required minlength="10" maxlength="3000"></textarea>
+    </div>
+
+    <p class="mention">Vos informations servent uniquement à vous répondre. Le message est transmis à l’association par le service Web3Forms.</p>
+
+    <button class="bouton" type="submit">Envoyer le message</button>
+    <p class="statut" role="status" aria-live="polite"></p>
+  </form>
+) : (
+  <p>Le formulaire de contact sera bientôt disponible. En attendant, écrivez-nous sur nos réseaux ci-dessous.</p>
+)}
+
+<style>
+  .formulaire { display: grid; gap: 1.25rem; margin-block: 1.25rem 3rem; }
+  .champ { display: grid; gap: 0.4rem; }
+  label { font-weight: 600; font-size: 0.95rem; }
+  input[type='text'], input[type='email'], textarea {
+    width: 100%; font: inherit; color: var(--encre); background: var(--creme);
+    border: 1px solid var(--trait); border-radius: 0; padding: 0.8rem 0.9rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  textarea { resize: vertical; min-height: 9rem; }
+  input:hover, textarea:hover { border-color: var(--cuivre); }
+  input:focus-visible, textarea:focus-visible { outline: none; border-color: var(--cuivre-texte); box-shadow: 0 0 0 3px color-mix(in srgb, var(--cuivre) 35%, transparent); }
+  input[aria-invalid='true'], textarea[aria-invalid='true'] { border-color: #b3261e; }
+  .piege { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .mention { font-size: 0.85rem; color: var(--encre-douce); margin: 0; }
+  button { justify-self: start; cursor: pointer; font: inherit; font-weight: 600; letter-spacing: 0.04em; }
+  button[disabled] { opacity: 0.6; cursor: progress; }
+  .statut { margin: 0; min-height: 1.5em; font-weight: 600; }
+  .statut.ok { color: #2e7d32; }
+  .statut.erreur { color: #b3261e; }
+  :global(:root[data-theme='dark']) .statut.ok { color: #7fd18b; }
+  :global(:root[data-theme='dark']) .statut.erreur { color: #f2918a; }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .statut.ok { color: #7fd18b; }
+    :global(:root:not([data-theme='light'])) .statut.erreur { color: #f2918a; }
+  }
+</style>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const form = document.querySelector<HTMLFormElement>('form.formulaire');
+    if (!form) return;
+    const statut = form.querySelector<HTMLElement>('.statut')!;
+    const bouton = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+
+    const afficher = (texte: string, type: 'ok' | 'erreur' | '') => {
+      statut.textContent = texte;
+      statut.className = `statut ${type}`.trim();
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Validation simple, avec messages en français.
+      const champs = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input[required], textarea[required]')];
+      champs.forEach((c) => c.removeAttribute('aria-invalid'));
+      const invalide = champs.find((c) => !c.checkValidity());
+      if (invalide) {
+        invalide.setAttribute('aria-invalid', 'true');
+        invalide.focus();
+        afficher(invalide.type === 'email' ? 'Merci de saisir une adresse e-mail valide.' : 'Merci de remplir tous les champs (message : 10 caractères minimum).', 'erreur');
+        return;
+      }
+
+      bouton.disabled = true;
+      afficher('Envoi en cours…', '');
+      try {
+        const reponse = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        });
+        const donnees = await reponse.json();
+        if (reponse.ok && donnees.success) {
+          form.reset();
+          afficher('Merci ! Votre message est bien parti, nous vous répondrons rapidement.', 'ok');
+        } else {
+          afficher('L’envoi a échoué. Merci de réessayer, ou de nous écrire sur nos réseaux.', 'erreur');
+        }
+      } catch {
+        afficher('Impossible d’envoyer le message (connexion). Merci de réessayer dans un instant.', 'erreur');
+      } finally {
+        bouton.disabled = false;
+      }
+    });
+  });
+</script>

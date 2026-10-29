@@ -2,8 +2,9 @@
 import Base from '../layouts/Base.astro';
 import { SITE } from '../config';
 import Reseaux from '../components/Reseaux.astro';
+import FormulaireContact from '../components/FormulaireContact.astro';
 ---
-<Base titre="Contact et adhésion" description="Adhérer à l’association culturelle Les Carthagi’Noix à Grenoble via HelloAsso, ou nous retrouver sur Instagram et Facebook.">
+<Base titre="Contact et adhésion" description="Contacter l’association culturelle Les Carthagi’Noix à Grenoble par formulaire, adhérer via HelloAsso ou nous retrouver sur Instagram et Facebook.">
   <section class="section">
     <div class="conteneur lecture">
       <p class="sur-titre">Contact</p>
@@ -14,9 +15,9 @@ import Reseaux from '../components/Reseaux.astro';
       <p><a class="bouton" href={SITE.adhesion}>Adhérer à l’association</a></p>
 
       <h2>Nous écrire</h2>
-      {SITE.email
-        ? <p><a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
-        : <p>Notre adresse e-mail sera bientôt disponible. En attendant, retrouvez-nous aux événements de l’agenda.</p>}
+      <p>Une question, une idée, une proposition de partenariat ? Écrivez-nous, nous vous répondrons rapidement.</p>
+      <FormulaireContact />
+      {SITE.email && <p>Vous pouvez aussi écrire directement à <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>}
 
       <h2>Suivez-nous</h2>
       <p>Actualités, coulisses et concerts : retrouvez-nous sur les réseaux.</p>

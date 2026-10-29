@@ -8,6 +8,10 @@ export const SITE = {
   titreAccueil: "Les Carthagi’Noix · Association culturelle à Grenoble",
   fondation: "2025-10-31",
   adhesion: "https://adhesion.lescarthaginoix.com/",
+  // Clé d'accès Web3Forms du formulaire de contact (publique par conception : elle peut être dans le code).
+  // Elle s'obtient sur https://web3forms.com avec l'adresse qui doit recevoir les messages.
+  // Tant qu'elle est vide, le formulaire affiche « bientôt disponible ».
+  web3formsKey: "",
   // Laisser vide ("") pour masquer un lien.
   email: "",
   instagram: "https://www.instagram.com/lescarthaginoix/",
