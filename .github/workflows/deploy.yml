@@ -3,6 +3,8 @@ name: Déploiement sur o2switch
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: '17 4 * * *' # chaque jour (UTC) : met à jour le compteur d'adhérents
   workflow_dispatch:
 
 concurrency:
@@ -25,6 +27,16 @@ jobs:
           cache-dependency-path: site/package-lock.json
 
       - run: npm ci
+      # Compte les adhérents HelloAsso (uniquement le nombre) ; en cas de problème, on garde le dernier nombre connu.
+      - name: Compter les adhérents
+        run: npm run adherents
+        env:
+          HELLOASSO_CLIENT_ID: ${{ secrets.HELLOASSO_CLIENT_ID }}
+          HELLOASSO_CLIENT_SECRET: ${{ secrets.HELLOASSO_CLIENT_SECRET }}
+          HELLOASSO_ORG: ${{ vars.HELLOASSO_ORG }}
+          HELLOASSO_FORM: ${{ vars.HELLOASSO_FORM }}
+          HELLOASSO_FROM: ${{ vars.HELLOASSO_FROM }}
+
       - run: npm run build
         env:
           PUBLIC_WEB3FORMS_KEY: ${{ secrets.WEB3FORMS_KEY }}

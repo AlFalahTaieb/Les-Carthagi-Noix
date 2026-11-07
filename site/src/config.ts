@@ -12,6 +12,8 @@ export const SITE = {
   // variable PUBLIC_WEB3FORMS_KEY (secret GitHub WEB3FORMS_KEY en production, fichier .env en local).
   // Tant qu'elle est vide, le formulaire affiche « bientôt disponible ».
   web3formsKey: (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | undefined) ?? "",
+  // Le compteur d'adhérents n'apparaît qu'à partir de ce nombre (0 = toujours, dès qu'il est connu).
+  seuilCompteur: 0,
   // Laisser vide ("") pour masquer un lien.
   email: "",
   instagram: "https://www.instagram.com/lescarthaginoix/",

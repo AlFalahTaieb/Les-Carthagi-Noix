@@ -54,6 +54,21 @@ La clé Web3Forms n'est pas dans le dépôt. En production, elle vient du secret
 renseigner `PUBLIC_WEB3FORMS_KEY`. La clé reste visible dans le code HTML de la page publiée, ce qui est
 inévitable pour tout formulaire envoyé depuis le navigateur.
 
+## Compteur d'adhérents (HelloAsso)
+
+Chaque jour (et à chaque déploiement), `scripts/adherents.mjs` compte les adhésions du formulaire HelloAsso
+et le site affiche ce nombre sur l'accueil. Seul le nombre est lu et publié, jamais un nom.
+
+Configuration dans GitHub (Settings, Secrets and variables, Actions) :
+- Secrets : `HELLOASSO_CLIENT_ID` et `HELLOASSO_CLIENT_SECRET` (HelloAsso : Mon Compte, Intégration et API).
+- Variables : `HELLOASSO_ORG` (identifiant de l'association dans l'adresse HelloAsso), `HELLOASSO_FORM`
+  (identifiant du formulaire d'adhésion) et, facultatif, `HELLOASSO_FROM` (ex. `2025-09-01` : ne compter
+  que les adhésions depuis cette date, utile pour une saison).
+
+Si HelloAsso ne répond pas, on garde le nombre déjà affiché sur le site (publié dans `/adherents.json`).
+Le seuil d'affichage se règle avec `seuilCompteur` dans `src/config.ts`. En local : `npm run adherents`
+avec les mêmes variables dans `.env`.
+
 ## Mise en ligne
 
 Après `npm run build`, envoyer le contenu du dossier `dist/` à la racine de l'hébergement du domaine.
