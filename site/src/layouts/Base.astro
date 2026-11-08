@@ -6,6 +6,7 @@ import { SITE } from '../config';
 import logoBrut from '../../public/logo.svg?raw';
 import { ClientRouter } from 'astro:transitions';
 import { organisation, siteWeb } from '../seo';
+import BarreHaute from '../components/BarreHaute.astro';
 
 // Le logo est intégré une seule fois à la page (<symbol>) puis réutilisé : il s'affiche
 // donc immédiatement à chaque page, sans téléchargement ni clignotement, et ses lettres
@@ -73,6 +74,7 @@ const serialiser = (o: object) => JSON.stringify(o).replace(/</g, '\\u003c');
     <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
       <symbol id="logo" viewBox="240 205 600 665" set:html={logoContenu} />
     </svg>
+    <BarreHaute />
     <Header />
     <main id="contenu" transition:name="contenu" transition:animate="none"><slot /></main>
     <Footer />

@@ -115,7 +115,7 @@ p { margin: 0 0 1.1em; }
 
 /* Transitions entre pages : le contenu s'efface puis se glisse doucement ; l'en-tête reste fixe. */
 ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
-::view-transition-group(entete), ::view-transition-group(pied) { animation: none; }
+::view-transition-group(entete), ::view-transition-group(pied), ::view-transition-group(barre) { animation: none; }
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-old(contenu) { animation: 160ms ease-in both sortie; }
   ::view-transition-new(contenu) { animation: 420ms cubic-bezier(.2,.7,.2,1) 120ms both entree; }

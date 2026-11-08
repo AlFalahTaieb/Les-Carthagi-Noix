@@ -6,12 +6,18 @@ import { mkdir, writeFile } from 'node:fs/promises';
 const {
   HELLOASSO_CLIENT_ID: id,
   HELLOASSO_CLIENT_SECRET: secret,
-  HELLOASSO_ORG: organisation, // identifiant de l'association dans l'adresse HelloAsso
-  HELLOASSO_FORM: formulaire, // identifiant du formulaire d'adhésion
+  HELLOASSO_URL: adresse, // adresse publique de la page d'adhésion HelloAsso (le plus simple)
   HELLOASSO_FROM: depuis, // facultatif : ne compter que les adhésions depuis cette date (ex. 2025-09-01)
   HELLOASSO_API = 'https://api.helloasso.com',
   SITE_ADHERENTS_URL = 'https://www.lescarthaginoix.com/adherents.json',
 } = process.env;
+
+// L'identifiant de l'association et celui du formulaire se lisent dans l'adresse :
+// helloasso.com/associations/<association>/adhesions/<formulaire>
+const trouve = (adresse ?? '').match(/associations\/([a-z0-9-]+)\/adhesions\/([a-z0-9-]+)/i);
+const organisation = trouve?.[1] ?? process.env.HELLOASSO_ORG?.trim();
+const formulaire = trouve?.[2] ?? process.env.HELLOASSO_FORM?.trim();
+const identifiantValide = (v) => typeof v === 'string' && /^[a-z0-9-]+$/i.test(v);
 
 const SORTIE = new URL('../src/data/adherents.json', import.meta.url);
 
@@ -64,8 +70,11 @@ async function dernierNombreConnu() {
   }
 }
 
-if (!id || !secret || !organisation || !formulaire) {
-  console.log('Identifiants HelloAsso non renseignés : compteur ignoré.');
+if (id && secret && !(identifiantValide(organisation) && identifiantValide(formulaire))) {
+  console.warn('::warning::HelloAsso : adresse de la page d\'adhésion illisible. Renseigner la variable HELLOASSO_URL (ex. https://www.helloasso.com/associations/mon-asso/adhesions/mon-formulaire).');
+}
+if (!id || !secret || !identifiantValide(organisation) || !identifiantValide(formulaire)) {
+  console.log('Configuration HelloAsso incomplète : compteur ignoré (dernier nombre conservé).');
   const ancien = await dernierNombreConnu();
   await ecrire(ancien?.nombre ?? null, ancien?.misAJour);
 } else {

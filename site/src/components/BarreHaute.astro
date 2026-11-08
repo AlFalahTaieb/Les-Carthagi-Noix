@@ -1,0 +1,70 @@
+---
+import { evenementsAVenir, dateCourte } from '../utils';
+import { adherents, adherentsMisAJour } from '../adherents';
+import { SITE } from '../config';
+
+const prochain = (await evenementsAVenir())[0];
+const afficherNombre = adherents !== null && adherents >= SITE.seuilCompteur;
+---
+{(prochain || afficherNombre) && (
+  <div class="barre-haute" transition:persist transition:name="barre">
+    <div class="conteneur interieur">
+      {prochain && (
+        <a class="decompte" href="/agenda/" data-debut={prochain.data.date.getTime()}>
+          <span class="sr-only">Prochain événement : {prochain.data.titre}, le {dateCourte(prochain.data.date)}.</span>
+          <span aria-hidden="true" class="icone">⏳</span>
+          <span aria-hidden="true"><strong>{prochain.data.titre}</strong> · {dateCourte(prochain.data.date)}</span>
+          <span aria-hidden="true" class="temps" data-temps></span>
+        </a>
+      )}
+      {afficherNombre && (
+        <p class="nombre" title={adherentsMisAJour ? `Mis à jour le ${adherentsMisAJour}` : undefined}>
+          <strong>{adherents}</strong> {adherents! > 1 ? 'adhérent·e·s' : 'adhérent·e'}
+        </p>
+      )}
+    </div>
+  </div>
+)}
+
+<style>
+  .barre-haute { background: var(--bande); color: var(--creme-fixe); font-size: 0.88rem; line-height: 1.4; }
+  .interieur { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.25rem 1.75rem; padding-block: 0.55rem; }
+  .decompte { color: inherit; text-decoration: none; display: inline-flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 0.2rem 0.6rem; }
+  .decompte:hover .temps { text-decoration: underline; }
+  .icone { font-size: 0.95em; }
+  .temps { color: #e0b27e; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .temps:empty { display: none; }
+  .nombre { margin: 0; padding-left: 1.75rem; border-left: 1px solid #5a5043; }
+  .nombre strong { color: #e0b27e; font-family: var(--titre); font-weight: 400; font-size: 1.15em; margin-right: 0.3em; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (max-width: 40rem) {
+    .barre-haute { font-size: 0.82rem; }
+    .nombre { padding-left: 0; border-left: 0; }
+  }
+</style>
+
+<script>
+  // Compte à rebours vers le prochain événement. L'élément est conservé d'une page à l'autre :
+  // on le relit à chaque tick plutôt que de le mémoriser.
+  const pluriel = (n: number, mot: string) => `${n} ${mot}${n > 1 && mot !== 'min' ? 's' : ''}`;
+
+  function maj() {
+    const lien = document.querySelector<HTMLElement>('.decompte');
+    const zone = lien?.querySelector<HTMLElement>('[data-temps]');
+    if (!lien || !zone) return;
+    const reste = Number(lien.dataset.debut) - Date.now();
+    if (reste > 0) {
+      const j = Math.floor(reste / 86_400_000);
+      const h = Math.floor((reste % 86_400_000) / 3_600_000);
+      const m = Math.floor((reste % 3_600_000) / 60_000);
+      zone.textContent = j > 0 ? `dans ${pluriel(j, 'jour')} ${h} h` : h > 0 ? `dans ${h} h ${String(m).padStart(2, '0')} min` : `dans ${pluriel(m, 'min')}`;
+    } else if (reste > -12 * 3_600_000) {
+      zone.textContent = 'c’est maintenant !';
+    } else {
+      lien.hidden = true; // événement passé : le prochain apparaîtra au prochain déploiement
+    }
+  }
+  maj();
+  setInterval(maj, 30_000);
+  document.addEventListener('astro:page-load', maj);
+</script>

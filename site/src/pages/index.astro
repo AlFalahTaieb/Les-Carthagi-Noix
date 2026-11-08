@@ -6,7 +6,6 @@ import { SITE } from '../config';
 import Logo from '../components/Logo.astro';
 import { evenementsAVenir as aVenir } from '../utils';
 import { evenement } from '../seo';
-import { adherents, adherentsMisAJour } from '../adherents';
 const actus = (await actualitesRecentes()).slice(0, 3);
 const donnees = (await aVenir()).slice(0, 3).map(evenement);
 const description = 'Association culturelle à Grenoble : club de musique orientale, concerts, rencontres et échanges entre Grenoble et le monde arabe. Ouvert à tous.';
@@ -23,11 +22,6 @@ const description = 'Association culturelle à Grenoble : club de musique orient
           <a class="bouton" href={SITE.adhesion}>Adhérer à l’association</a>
           <a class="bouton contour" href="/agenda/">Voir l’agenda</a>
         </p>
-        {adherents !== null && adherents >= SITE.seuilCompteur && (
-          <p class="compteur apparait" style="--i:4" title={adherentsMisAJour ? `Mis à jour le ${adherentsMisAJour}` : undefined}>
-            <strong>{adherents}</strong> {adherents > 1 ? 'adhérent·e·s' : 'adhérent·e'} nous ont déjà rejoints
-          </p>
-        )}
       </div>
       <div class="heros-logo apparait" style="--i:2">
         <Logo alt="Logo Les Carthagi’Noix : une noix ornée du signe de Tanit" width="420" height="466" />
@@ -97,8 +91,6 @@ const description = 'Association culturelle à Grenoble : club de musique orient
   .heros { padding-top: clamp(2.5rem, 7vw, 5.5rem); background: radial-gradient(circle at 80% 30%, var(--creme-fonce), var(--creme) 60%); }
   .heros-grille { display: grid; grid-template-columns: 1.3fr 1fr; gap: 3rem; align-items: center; }
   .chapeau { font-size: 1.2rem; color: var(--encre-douce); max-width: 34rem; }
-  .compteur { margin: 1.75rem 0 0; color: var(--encre-douce); }
-  .compteur strong { font-family: var(--titre); font-weight: 400; font-size: 1.9rem; color: var(--cuivre-texte); margin-right: 0.15em; vertical-align: -0.1em; }
   .actions { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 2rem; }
   .heros-logo :global(svg) { width: min(100%, 26rem); margin-inline: auto; }
   .devise-bande { margin: clamp(2.5rem, 6vw, 4rem) 0 0; padding: 1rem; text-align: center; font-family: var(--titre); letter-spacing: 0.35em; text-transform: uppercase; font-size: 0.9rem; color: var(--creme-fixe); background: var(--bande); }

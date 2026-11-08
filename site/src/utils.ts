@@ -6,6 +6,8 @@ export const jour = (d: Date) => new Intl.DateTimeFormat('fr-FR', { day: 'numeri
 export const moisCourt = (d: Date) => new Intl.DateTimeFormat('fr-FR', { month: 'short', timeZone: TZ }).format(d).replace('.', '');
 export const dateLongue = (d: Date) =>
   new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: TZ }).format(d);
+export const dateCourte = (d: Date) =>
+  new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: TZ }).format(d);
 export const dateSimple = (d: Date) =>
   new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: TZ }).format(d);
 export const heure = (d: Date) =>
