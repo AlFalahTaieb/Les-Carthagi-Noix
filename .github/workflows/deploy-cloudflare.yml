@@ -40,25 +40,3 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
-  invitation:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Préparer la page (injection de la clé Web3Forms)
-        working-directory: invitation
-        env:
-          CLE: ${{ secrets.WEB3FORMS_KEY }}
-        run: |
-          mkdir dist
-          cp *.html *.jpg dist/
-          sed -i "s/__WEB3FORMS_KEY__/$CLE/" dist/index.html
-      - name: Publier sur Cloudflare
-        working-directory: invitation
-        run: npx --yes wrangler@4 deploy
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

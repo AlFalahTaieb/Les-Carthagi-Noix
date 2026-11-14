@@ -1,6 +1,0 @@
-{
-  // Page d'invitation à l'inauguration (sous-domaine du site)
-  "name": "carthaginoix-invitation",
-  "compatibility_date": "2026-11-01",
-  "assets": { "directory": "./dist" }
-}
